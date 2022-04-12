@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method = "post" action = "/getdata/">
+    {% csrf_token %}
+    <input type = "text" name = "x" placehoder = "请输入x"/><br>
+    <input type = "text" name = "y" placehoder = "请输入y"><br>
+    <input type = "submit" value = "进行计算">
+</form>
+
+</body>
+</html>

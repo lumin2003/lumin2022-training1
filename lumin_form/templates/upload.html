@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <title>用户注册</title>
+    <!-- Bootstrap 相关文件 -->
+    <link rel="stylesheet" href="https://cdn.staticifle.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticifle.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticifle.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <ul class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="#">2022</a></li>
+        <li class="active">四月</li>
+    </ul>
+    <table class="table">
+        <caption>用户列表</caption>
+        <thead>
+           <tr>
+               <th>ID</th>
+               <th>账户</th>
+               <th>密码</th>
+               <th>地址</th>
+               <th>时间</th>
+               <th>邮箱</th>
+               <th>操作</th>
+           </tr>
+        </thead>
+        <tbody>
+           {% for d in list %}
+           <tr>
+              <td>{{d.id}}</td>
+              <td>{{d.username}}</td>
+              <td>{{d.password}}</td>
+              <td>{{d.address}}</td>
+              <td>{{d.create_date}}</td>
+              <td>{{d.email}}</td>
+           </tr>
+           {% endfor %}
+        {% block content %}
+        <form method="post" enctype="multipart/form-data" action = "upload">
+            {% csrf_token %}
+            <input type="file" name="myfile" >
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>Upload</button>
+        </form>
+        {% endblock %}
+        </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> <meta charset="UTF-8">
+    <title>学生编辑</title>
+    <style>
+   form {
+     margin : 20px auto ;
+     width : 500px ;
+     border : 1px solid #ccc;
+     padding : 20px
+     }
+    </style>
+</head>
+<body>
+<form method="post" action="/edit/?user_id={{ user_obj.id }}">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ UserInfo.id }}"/>
+    <table>
+    <tr>
+        <th>姓 名</th>
+        <td><input name="username" value="{{ UserInfo.username }}"></td>
+    </tr>
+    <tr>
+        <th>密 码</th>
+        <td><input name="password" value="{{ UserInfo.password }}"/></td>
+    </tr>
+    <tr>
+        <th>邮 箱</th>
+        <td><input name="email" value="{{ UserInfo.email }}"/></td>
+    </tr>
+    <tr>
+        <th>年 龄</th>
+        <td><input name="age" value="{{ UserInfo.age }}"/></td>
+    </tr>
+    <tr>
+        <th>住 址</th>
+        <td><input name="address" value="{{ UserInfo.address }}"/></td>
+    </tr>
+    <tr>
+    <td colspan="2">
+    <input type="submit"/>
+    </td>
+    </tr>
+    </table>
+</form>
+</body>
+</html>
