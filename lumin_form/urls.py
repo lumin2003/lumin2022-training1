@@ -26,7 +26,8 @@ urlpatterns = [
     path('getdata/', views.show),
     path('insert/', views.insert, name='register'),
     path('index/', views.index, name='index'),
-    path('edit/', views.edit),
-    path('delete_user/(?P<UserInfo_id>[0-9]+)/$',views.delete_user,name='delete_user'),
+    path('edit_user/', views.edit_user),
+    path('delete_user/', views.delete_user,name='delete_user'),
+    path('add_user/', views.add_user),
     path('upload/', views.upload),
 ]

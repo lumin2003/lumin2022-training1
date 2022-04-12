@@ -56,37 +56,55 @@ def insert(request):
         return redirect('/index/')
 
 
-def edit(request):
-    if request.method == 'GET':
-        id = request.GET.get("id")
-        conn = MySQLdb.connect(host="localhost", user="root", passwd="123456Zlm!!", db="lumin_form", charset='utf8')
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT id,username,password,address,create_date,email FROM hello_UserInfo where id =%s", [id])
-            UsersInfo = cursor.fetchone()
-        return render(request, 'edit.html', {'UsersInfo': UsersInfo})
-    else:
-        id = request.POST.get("id")
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        address = request.POST.get('address', '')
-        create_date = request.POST.get('create_date', '')
-        email = request.POST.get('email', '')
-        conn = MySQLdb.connect(host="localhost", user="root", passwd="123456Zlm!!", db="lumin_form", charset='utf8')
-        with conn.cursor() as cursor:
-            cursor.execute("UPDATE hello_UserInfo set username=%s,password=%s,address=%s,create_date=%s,email=%s where id =%s", [username,password,address,create_date,email, id])
-    conn.commit()
-    return redirect('edit.html')
-# 学生信息删除处理函数，同上，SQL语句改变而已。
+def edit_user(request):
+    edit_id = request.GET.get('id')
+    if request.method == 'POST':
+        new_pwd = request.POST.get('password')
+        new_address = request.POST.get('address')
+        new_email = request.POST.get('email')
 
+        edit_obj = models.UserInfo.objects.get(id=edit_id)
+        edit_obj.password = new_pwd
+        edit_obj.address = new_address
+        edit_obj.email = new_email
+        # 保存数据库
+        edit_obj.save()
+        return redirect('/index/')
+    ret = models.UserInfo.objects.get(id=edit_id)
+    return render(request, 'edit.html', {'ret': ret})
+
+def add_user(request):
+    error_name = ''
+    if request.method == 'POST':
+    # 1、获取前端输入的数据
+        user = request.POST.get('username')
+        password = request.POST.get('password')
+        address = request.POST.get('address')
+        email = request.POST.get('email')
+        user_list = models.UserInfo.objects.filter(username=user)
+         # 2、判断数据库是否存在
+        if user_list :
+                error_name = '%s用户名已经存在了' % user
+                return  render(request,'add_user.html',{'error_name':error_name})
+        # 3、存储到数据库中
+        else:
+            user = models.UserInfo.objects.create(username=user,
+                                       password=password,
+                                       address=address,
+                                       create_date=now(),
+                                       email=email)
+            user.save()
+            return redirect('/index/')
+    return render(request, 'add_user.html')
 
 
 
 #2 学生信息删除处理函数，同上，SQL语句改变而已。
-def delete_user(request, UserInfo_id):
-    UserInfo = get_object_or_404(UserInfo, pk=UserInfo_id)
-    if request.method == 'POST':
-        UserInfo.delete()
-        return redirect('/index/')
+def delete_user(request):
+    delete_id = request.GET.get('id')
+    # 从数据库删除的
+    models.UserInfo.objects.filter(id=delete_id).delete()
+    return redirect('/index/')
     return render(request, 'index.html', {'UserInfo': UserInfo})
 
 

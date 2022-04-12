@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head> <meta charset="UTF-8">
-    <title>学生编辑</title>
+    <title>用户编辑</title>
     <style>
    form {
      margin : 20px auto ;
@@ -12,36 +12,28 @@
     </style>
 </head>
 <body>
-<form method="post" action="/edit/?user_id={{ user_obj.id }}">
-    {% csrf_token %}
-    <input type="hidden" name="id" value="{{ UserInfo.id }}"/>
-    <table>
+<center>
     <tr>
-        <th>姓 名</th>
-        <td><input name="username" value="{{ UserInfo.username }}"></td>
-    </tr>
+      <h1>修改密码</h1>
+           <form action="/edit_user/?id={{ ret.id }}" method="post">
+               {% csrf_token %}
+           密码：<input type="text" name="password" value="{{ ret.password }}">
+      <input type="submit">
+      </tr>
     <tr>
-        <th>密 码</th>
-        <td><input name="password" value="{{ UserInfo.password }}"/></td>
-    </tr>
+      <h1>修改住址</h1>
+           <form action="/edit_user/?id={{ ret.id }}" method="post">
+               {% csrf_token %}
+           住址：<input type="text" name="address" value="{{ ret.address }}">
+      <input type="submit">
+      </tr>
     <tr>
-        <th>邮 箱</th>
-        <td><input name="email" value="{{ UserInfo.email }}"/></td>
-    </tr>
-    <tr>
-        <th>年 龄</th>
-        <td><input name="age" value="{{ UserInfo.age }}"/></td>
-    </tr>
-    <tr>
-        <th>住 址</th>
-        <td><input name="address" value="{{ UserInfo.address }}"/></td>
-    </tr>
-    <tr>
-    <td colspan="2">
-    <input type="submit"/>
-    </td>
-    </tr>
-    </table>
-</form>
+      <h1>修改邮件</h1>
+           <form action="/edit_user/?id={{ ret.id }}" method="post">
+               {% csrf_token %}
+           邮件：<input type="text" name="email" value="{{ ret.email }}">
+      <input type="submit">
+      </tr>
+</center>
 </body>
 </html>
