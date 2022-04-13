@@ -8,8 +8,8 @@ from .resources import UserInfoResource
 admin.site.register(models.User)
 
 class UserInfoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
- list_display = ('username','password','address','create_date','email','age')
- search_fields = ('username','password','address','create_date','email','age')
+ list_display = ('username','password','address','email','age','sex')
+ search_fields = ('username','password','address','email','age','sex')
  date_hierarchy = 'create_date'
  resource_class = UserInfoResource
 

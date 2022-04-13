@@ -7,4 +7,4 @@ class UserInfoResource(resources.ModelResource):
         skip_unchanged = True
         report_skipped = True
         exclude = ('id',)
-        fields = ('username', 'password', 'address', 'create_date','email')
+        fields = ('username', 'password', 'address', 'age','create_date','email','sex')

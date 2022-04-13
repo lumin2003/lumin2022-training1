@@ -28,10 +28,24 @@
       <input type="submit">
       </tr>
     <tr>
-      <h1>修改邮件</h1>
+      <h1>修改年龄</h1>
            <form action="/edit_user/?id={{ ret.id }}" method="post">
                {% csrf_token %}
+           住址：<input type="text" name="age" value="{{ ret.age }}">
+      <input type="submit">
+      </tr>
+    <tr>
+      <h1>修改邮件</h1>
+           <Form action="/edit_user/?id={{ ret.id }}" method="post">
+               {% csrf_token %}
            邮件：<input type="text" name="email" value="{{ ret.email }}">
+      <input type="submit">
+    <tr>
+    <tr>
+      <h1>修改性别</h1>
+           <form action="/edit_user/?id={{ ret.id }}" method="post">
+               {% csrf_token %}
+           性别：<input type="text" name="sex" value="{{ ret.sex }}">
       <input type="submit">
       </tr>
 </center>

@@ -48,11 +48,12 @@ def insert(request):
     elif request.method == "POST":
         username = request.POST.get("username", None) # change from get("username") to get("name")
         password = request.POST.get("password", None)
-        mail = request.POST.get("email", None)
+        email = request.POST.get("email", None)
         age = request.POST.get("age", None)
         address = request.POST.get("address", None)
-        tem=UserInfo.objects.create(username=username, password=password, email=mail, age=age, address=address,
-                                       create_date=now()) #change model.UserInfo to UserInfo
+        sex = request.POST.get("sex", None)
+        UserInfo.objects.create(username=username, address=address, password=password,  age=age,
+                                       create_date=now(), email=email,sex=sex) #change model.UserInfo to UserInfo
         return redirect('/index/')
 
 
@@ -61,12 +62,16 @@ def edit_user(request):
     if request.method == 'POST':
         new_pwd = request.POST.get('password')
         new_address = request.POST.get('address')
+        new_age = request.POST.get('age')
         new_email = request.POST.get('email')
+        new_sex = request.POST.get('sex')
 
         edit_obj = models.UserInfo.objects.get(id=edit_id)
         edit_obj.password = new_pwd
         edit_obj.address = new_address
+        edit_obj.age = new_age
         edit_obj.email = new_email
+        edit_obj.sex = new_sex
         # 保存数据库
         edit_obj.save()
         return redirect('/index/')
@@ -80,7 +85,9 @@ def add_user(request):
         user = request.POST.get('username')
         password = request.POST.get('password')
         address = request.POST.get('address')
+        age = request.POST.get('age')
         email = request.POST.get('email')
+        sex = request.POST.get('sex')
         user_list = models.UserInfo.objects.filter(username=user)
          # 2、判断数据库是否存在
         if user_list :
@@ -88,11 +95,13 @@ def add_user(request):
                 return  render(request,'add_user.html',{'error_name':error_name})
         # 3、存储到数据库中
         else:
-            user = models.UserInfo.objects.create(username=user,
+            tem = models.UserInfo.objects.create(username=user,
                                        password=password,
                                        address=address,
+                                       age=age,
                                        create_date=now(),
-                                       email=email)
+                                       email=email,
+                                       sex=sex)
             user.save()
             return redirect('/index/')
     return render(request, 'add_user.html')
@@ -105,7 +114,7 @@ def delete_user(request):
     # 从数据库删除的
     models.UserInfo.objects.filter(id=delete_id).delete()
     return redirect('/index/')
-    return render(request, 'index.html', {'UserInfo': UserInfo})
+    #return render(request, 'index.html', {'UserInfo': UserInfo})
 
 
 from django.http import HttpResponseRedirect, Http404
@@ -120,41 +129,37 @@ import csv
 from csv import reader
 from .models import UserInfo
 from django.urls import reverse
-import logging
+import pandas as pd
 
 
-def upload(request):
+def csv_upload(request):
+    print("i am here4")
+    template = "index.html"
+    data = UserInfo.objects.all()
+    print("i am here3")
+    prompt = {
+        'order': 'Order of the CSV should be username, password, address,age, sex',
+        'UserInfo': data
+    }
+    print("i am here2")
     if request.method == 'POST':
-        UserInfo_resource = UserInfoResource()
-        # dataset = UserInfo_resource.export()
         new_UserInfo = request.FILES['myfile']
-        tem2 = new_UserInfo.read().decode('utf-8')
-        rows = []
-        lines = tem2.split('\n')
-        created = None
-        created_records = 0
-
-        for line in lines:
-            fields = line.split(",")
-            print("line",line)
-            data_dict = {}
-
-            class data_dict:
-                def __init__(self, username, password, address, create_date, email):
-                    self.username = username
-                    self.password = password
-                    self.address = address
-                    self.create_date = create_date
-                    self.email = email
-
-            data_dict.username = fields[0]
-            data_dict.password = fields[1]
-            print("fields[1]", fields[1])
-            data_dict.address = fields[2]
-            data_dict.create_date = fields[3]
-            data_dict.email = fields[4]
-
-        if created:
-            created_records += 1
-        result = UserInfo_resource.import_data(tem2, dry_run=True)
-        return redirect('/index/')
+        print("i am here6")
+    tem2 = new_UserInfo.read().decode('utf-8')
+    print("i am here")
+    io_string = io.StringIO(tem2)
+    print("io_string",io_string)
+    #next(io_string) #removal header
+    for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+           _, created = UserInfo.objects.update_or_create (
+               username=column[0],
+               password=column[1],
+               address=column[2],
+               age = column[3],
+               create_date = column[4],
+               email=column[5],
+               sex=column[6]
+               )
+           context = dict()
+    print("context",context)
+    return redirect('/index',context)

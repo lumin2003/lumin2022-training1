@@ -29,5 +29,5 @@ urlpatterns = [
     path('edit_user/', views.edit_user),
     path('delete_user/', views.delete_user,name='delete_user'),
     path('add_user/', views.add_user),
-    path('upload/', views.upload),
+    path('csv_upload/', views.csv_upload),
 ]
